@@ -1,37 +1,46 @@
-import User from "../models/User";
+import User from "../models/User.js";
 import bcrypt from "bcrypt";
 
-export function registerUser(req,res){
+export function registerUser(req, res) {
+    const data = req.body;
 
-    const data=req.body;
+    // Hash password with salting
+    data.password = bcrypt.hashSync(data.password, 10);
 
-    data.password=bcrypt.hashSync(data.password,10)//salting round 10 means 10 time hashing
     const newUser = new User(data);
 
-    newUser.save().then(()=>{
-        res.json({message:"user register successsfuly"})
-    }).catch((error)=>{
-        res.status(500).json({error:"failed"})
-    })
-}
-export function loginUser(req,res){
-    const data =req.body;
-
-    User.findOne({
-        emial:data.email,  //check database email equal to entered email
-    }).then(
-        (user)=>{
-            if(user==null){
-                res.status(404).json({error:"User not found"});
-            }else{
-                const isPasswordCorrect = bcrypt.compareSync(data.password,user.password);
-
-                if(isPasswordCorrect){
-                    res.json({message:"Login successfuly"});
-                }else{
-                    res.status(401).json({error:"Login failed"});
-                }
+    newUser
+        .save()
+        .then(() => {
+            res.json({ message: "User registered successfully" });
+        })
+        .catch((error) => {
+            if (error.code === 11000) { // Duplicate key error (unique email)
+                res.status(400).json({ error: "Email already exists" });
+            } else {
+                res.status(500).json({ error: "Failed to register user" });
             }
-        }
-    );
+        });
+}
+
+export function loginUser(req, res) {
+    const data = req.body;
+
+    User.findOne({ email: data.email }) // Corrected typo
+        .then((user) => {
+            if (user == null) {
+                return res.status(404).json({ error: "User not found" });
+            }
+
+            const isPasswordCorrect = bcrypt.compareSync(data.password, user.password);
+
+            if (isPasswordCorrect) {
+                res.json({ message: "Login successful" });
+            } else {
+                res.status(401).json({ error: "Invalid email or password" });
+            }
+        })
+        .catch(() => {
+            res.status(500).json({ error: "Server error" });
+        });
 }

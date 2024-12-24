@@ -1,8 +1,8 @@
 import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
-//import Student from "./models/Student.js";
-import studentRouter from "./Routes/Student.js";
+import userRouter from "./Routes/UserRouter.js";
+
 
 let app=express();
 
@@ -19,9 +19,8 @@ connection.once("open",()=>{
     console.log("MongoDB connection established successfully")
 })
 
-// get data from database
-app.use("/students",studentRouter)
 
+app.use("/api/users",userRouter);
 
 
 
