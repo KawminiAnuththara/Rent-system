@@ -1,4 +1,4 @@
-import Review from "../models/Review";
+import Review from "../models/Review.js";
 
 export function addReview(req,res){
    if(req.user == null){
