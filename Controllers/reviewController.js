@@ -36,3 +36,62 @@ export function getReview(req,res){
         })
     }
 }
+export function deleteReview(req,res){
+    const email = req.params.email;
+
+    //admin and paticular user can delete review
+
+    if(req.user == null){
+        res.status(401).json({
+            message:"Please login and try again"
+        });
+        return
+    }
+    if(req.user.role == "admin"){
+        Review.deleteOne({email:email}).then(()=>{
+            res.json({message:"Review deleted successfully"});
+        }).catch(()=>{
+            res.status(500).json({error:"Review deletion failed"});
+        });
+        return
+    }
+
+    if(req.user.role == "customer"){
+        if(req.user.email == email){    //check req api behind email equal to user email
+            Review.deleteOne
+            ({email:email}).then(()=>{
+                res.json({message:"Review deleted successfully"});
+            }).catch(()=>{
+                res.status(500).json({error:"Review deletion failed"});
+            });
+        }
+        else{
+            res.status(403).json({message:"You are not authorized to perform this action"});
+        }
+    }
+    
+}
+
+export function approveReview(req,res){
+    const email=req.params.email;
+
+    if(req.user == null){
+        res.status(401).json({message:"Please login and try again"});
+        return
+    }
+
+    if(req.user.role == "admmin"){
+        Review.updateOne({
+           email:email,
+        },{
+
+           isApproved:true,
+        }).then(()=>{
+            res.json({message: "Review approved successfully"});
+        }).catch(()=>{
+            res.status(500).json({error:"Review aproved failed"});
+        });
+    }else{
+        res.status(403).json({message:"You are not authorized to perform this action"});
+    }
+}
