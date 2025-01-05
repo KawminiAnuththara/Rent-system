@@ -22,3 +22,17 @@ export function addReview(req,res){
     res.status(500).json({error:"Review addition failed"});
    })
 }
+export function getReview(req,res){
+    if(user == null || user.role != "admin"){
+        Review.find({isApproved:true}).then((reviews)=>{
+            res.json(reviews);
+        })
+        return
+    }
+
+    if(user.role == "admin"){
+        Review.find().then((reviews)=>{
+            res.json(reviews);
+        })
+    }
+}

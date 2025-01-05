@@ -39,10 +39,11 @@ connection.once("open",()=>{
     console.log("MongoDB connection established successfully")
 })
 
+app.use(express.json());
 
 app.use("/api/users",userRouter);
 app.use("/api/products", productRouter);
-app.use("api/reviews",reviewRouter);
+app.use("/api/reviews",reviewRouter);
 
 // "email": "johndoe@examples.com",
 //"password": "securepassword123",      admin
