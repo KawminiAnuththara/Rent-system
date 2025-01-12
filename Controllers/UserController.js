@@ -56,3 +56,15 @@ export function loginUser(req, res) {
             res.status(500).json({ error: "Server error" });
         });
 }
+//admin checking always doing in this code to prevent that commonly used function 
+
+export function isItAdmin(req){
+    let isAdmin = false;
+  
+    if(req.user != null){
+      if(req.user.role == "admin"){
+        isAdmin=true;
+      }
+    }
+    return isAdmin;
+  }
