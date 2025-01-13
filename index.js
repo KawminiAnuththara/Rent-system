@@ -6,6 +6,7 @@ import productRouter from "./Routes/productRouter.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import reviewRouter from "./Routes/reviewRouter.js";
+import inquiryRouter from "./Routes/inquiryRouter.js";
 
 dotenv.config();    //load environmental variable values
 
@@ -44,6 +45,7 @@ app.use(express.json());
 app.use("/api/users",userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/reviews",reviewRouter);
+app.use("/api/inquiries",inquiryRouter);
 
 // "email": "johndoe@examples.com",
 //"password": "securepassword123",      admin
