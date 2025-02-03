@@ -48,7 +48,7 @@ export function loginUser(req, res) {
                     profilePicture:user.profilePicture,
                     phone:user.phone,
                 },process.env.JWT_SECRET)
-                res.json({ message: "Login successful",token:token });
+                res.json({ message: "Login successful",token:token ,user:user});
             } else {
                 res.status(401).json({ error: "Invalid email or password" });
             }
