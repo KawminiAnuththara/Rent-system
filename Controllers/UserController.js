@@ -5,27 +5,35 @@ import dotenv from 'dotenv'
 
 dotenv.config();
 
-export function registerUser(req, res) {
-    const data = req.body;
+const registerUser = async (req, res) => {
+  try {
+    const { name, email, password } = req.body; // Ensure password is received
 
-    // Hash password with salting
-    data.password = bcrypt.hashSync(data.password, 10);
+    if (!password) {
+      return res.status(400).json({ message: "Password is required" });
+    }
 
-    const newUser = new User(data);
+    // Hash password securely
+    const saltRounds = 10; // Define salt rounds
+    const hashedPassword = bcrypt.hashSync(password, saltRounds);
 
-    newUser
-        .save()
-        .then(() => {
-            res.json({ message: "User registered successfully" });
-        })
-        .catch((error) => {
-            if (error.code === 11000) { // Duplicate key error (unique email)
-                res.status(400).json({ error: "Email already exists" });
-            } else {
-                res.status(500).json({ error: "Failed to register user" });
-            }
-        });
-}
+    // Save user (replace with your DB logic)
+    const newUser = {
+      name,
+      email,
+      password: hashedPassword, // Store hashed password
+    };
+
+    // Send response
+    res.status(201).json({ message: "User registered successfully!", user: newUser });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error during registration" });
+  }
+};
+
+export { registerUser };
 
 export function loginUser(req, res) {
     const data = req.body;
