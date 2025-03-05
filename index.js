@@ -8,6 +8,7 @@ import dotenv from "dotenv";
 import reviewRouter from "./Routes/reviewRouter.js";
 import inquiryRouter from "./Routes/inquiryRouter.js";
 import cors from "cors";
+import orderRouter from "./Routes/orderRouter.js";
 
 dotenv.config();    //load environmental variable values
 
@@ -49,6 +50,7 @@ app.use("/api/users",userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/reviews",reviewRouter);
 app.use("/api/inquiries",inquiryRouter);
+app.use("/api/orders",orderRouter);
 
 // "email": "johndoe@examples.com",
 //"password": "securepassword123",      admin
@@ -56,6 +58,6 @@ app.use("/api/inquiries",inquiryRouter);
 //"email": "jeny@examples.com",
 //"password": "password123",         customer
 
-app.listen(3000,()=>{
-    console.log("hello");
+app.listen(5000,()=>{
+    console.log("running on port 5000");
 })
